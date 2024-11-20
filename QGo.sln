@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34309.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QGo", "QGo\QGo.csproj", "{CD4D7387-9953-4812-898E-942BDECA97A5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD4D7387-9953-4812-898E-942BDECA97A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD4D7387-9953-4812-898E-942BDECA97A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD4D7387-9953-4812-898E-942BDECA97A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD4D7387-9953-4812-898E-942BDECA97A5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E137D2B5-4CEE-4478-BBD4-5B428CB3EEA3}
+	EndGlobalSection
+EndGlobal
