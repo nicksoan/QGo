@@ -27,6 +27,7 @@ namespace QGo
         private NotifyIcon _notifyIcon;
         private IntPtr _windowHandle;
         private bool _isUserEditing = true; // Flag to track user edits
+        private int _previousTextLength = 0;
 
         public MainWindow()
         {
@@ -73,6 +74,83 @@ namespace QGo
             }
         }
 
+        private void queryText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (!_isUserEditing)
+            {
+                // Update previous text length and return
+                _previousTextLength = queryText.Text.Length;
+                return;
+            }
+
+            string currentText = queryText.Text;
+
+            // Determine if the user is deleting text
+            bool isDeleting = currentText.Length < _previousTextLength;
+
+            if (isDeleting)
+            {
+                // User is deleting text, do not autocomplete
+                queryText.Background = new SolidColorBrush(Colors.White);
+                _previousTextLength = currentText.Length;
+                return;
+            }
+
+            // Proceed with autocomplete logic
+            AutocompleteText(currentText);
+
+            // Update previous text length
+            _previousTextLength = queryText.Text.Length;
+        }
+
+        private void AutocompleteText(string currentText)
+        {
+            if (string.IsNullOrEmpty(currentText))
+            {
+                queryText.Background = new SolidColorBrush(Colors.AntiqueWhite);
+                return;
+            }
+
+            var matches = _parser.GetMatchingShortcuts(currentText);
+
+            if (matches.Any())
+            {
+                var match = matches.First();
+
+                if (match.StartsWith(currentText, StringComparison.OrdinalIgnoreCase) && match != currentText)
+                {
+                    // Temporarily detach event handler
+                    queryText.TextChanged -= queryText_TextChanged;
+                    _isUserEditing = false;
+
+                    try
+                    {
+                        queryText.Background = new SolidColorBrush(Colors.ForestGreen);
+
+                        // Append remaining text without selecting
+                        string remainingText = match.Substring(currentText.Length);
+                        queryText.Text = currentText + remainingText;
+                        queryText.SelectionLength = remainingText.Length;
+                        queryText.SelectionStart = currentText.Length;
+                        //queryText.SelectionStart = queryText.Text.Length;
+                    }
+                    finally
+                    {
+                        _isUserEditing = true;
+                        queryText.TextChanged += queryText_TextChanged;
+                    }
+                }
+                else
+                {
+                    queryText.Background = new SolidColorBrush(Colors.White);
+                }
+            }
+            else
+            {
+                queryText.Background = new SolidColorBrush(Colors.DarkRed);
+            }
+        }
+
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             // Focus on the textbox when the window loads
@@ -85,66 +163,7 @@ namespace QGo
             RegisterHotKey();
         }
 
-        private void queryText_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (!_isUserEditing) return;
-
-            // Calculate the net change in text length
-            int changeInLength = e.Changes.Sum(change => change.AddedLength - change.RemovedLength);
-
-            if (changeInLength <= 0)
-            {
-                // User is deleting text, do not autocomplete
-                queryText.Background = new SolidColorBrush(Colors.White);
-                return;
-            }
-
-            string currentText = queryText.Text;
-
-            if (string.IsNullOrEmpty(currentText))
-            {
-                // Reset styles if text is cleared
-                queryText.Background = new SolidColorBrush(Colors.AntiqueWhite);
-                return;
-            }
-
-            var matches = _parser.GetMatchingShortcuts(currentText);
-
-            // If there's a matching shortcut, autocomplete the text box
-            if (matches.Any())
-            {
-                var match = matches.First();
-
-                if (match.StartsWith(currentText, StringComparison.OrdinalIgnoreCase) && match != currentText)
-                {
-                    // Temporarily detach the event to prevent recursion
-                    queryText.TextChanged -= queryText_TextChanged;
-
-                    queryText.Background = new SolidColorBrush(Colors.ForestGreen);
-
-                    // Temporarily disable user editing to avoid recursive triggering
-                    _isUserEditing = false;
-
-                    // Preserve user input and autocomplete remaining characters
-                    queryText.Text = match;
-                    queryText.SelectionStart = currentText.Length;
-                    queryText.SelectionLength = match.Length - currentText.Length;
-
-                    queryText.TextChanged += queryText_TextChanged;
-                }
-                else
-                {
-                    // Allow free editing if no valid match starts with the input
-                    queryText.Background = new SolidColorBrush(Colors.White);
-                }
-            }
-            else
-            {
-                queryText.Background = new SolidColorBrush(Colors.DarkRed);
-            }
-
-            _isUserEditing = true;
-        }
+        
 
         private void HideWindow()
         {
