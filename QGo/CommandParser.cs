@@ -1,6 +1,8 @@
-﻿using System;
+﻿using QGo.Models;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.DirectoryServices;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,8 +23,10 @@ namespace QGo
         {
             _shortcuts = LoadShortcuts("shortcuts.json");
         }
-        public void ExecuteCommand(string command)
+        public QSearchResult ExecuteCommand(string command)
         {
+            var searchResult = new QSearchResult();
+
             try
             {
                 // Trim the command to handle any extra spaces.
@@ -30,8 +34,9 @@ namespace QGo
 
                 if (string.IsNullOrEmpty(command))
                 {
-                    Console.WriteLine("Empty command. Please provide a valid command.");
-                    return;
+                    searchResult.Success = false;
+                    searchResult.Message = "Empty command. Please provide a valid command.";
+                    return searchResult;
                 }
 
                 // Check if the command is a shortcut
@@ -44,23 +49,37 @@ namespace QGo
                 if (WebsiteRegex.IsMatch(command))
                 {
                     OpenWebsite(command);
+                    searchResult.Success = true;
+                    searchResult.Message = "Running Command";
+                    return searchResult;
+
                 }
                 else if (UncPathRegex.IsMatch(command))
                 {
                     OpenUncPath(command);
+                    searchResult.Success = true;
+                    searchResult.Message = "Running Command";
+                    return searchResult;
                 }
                 else if (LocalPathRegex.IsMatch(command))
                 {
                     OpenLocalFolder(command);
+                    searchResult.Success = true;
+                    searchResult.Message = "Running Command";
+                    return searchResult;
                 }
                 else
                 {
-                    Console.WriteLine("Unknown command type.");
+                    searchResult.Success = false;
+                    searchResult.Message = "Unknown Command";
+                    return searchResult;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error executing command: {ex.Message}");
+                searchResult.Success = false;
+                searchResult.Message = $"Error executing command: {ex.Message}";
+                return searchResult;
             }
         }
 

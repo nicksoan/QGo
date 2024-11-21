@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Color = System.Windows.Media.Color;
+
 
 namespace QGo
 {
@@ -24,6 +26,7 @@ namespace QGo
         private readonly CommandParser _parser;
         private NotifyIcon _notifyIcon;
         private IntPtr _windowHandle;
+        private bool _isUserEditing = true; // Flag to track user edits
 
         public MainWindow()
         {
@@ -51,7 +54,17 @@ namespace QGo
             {
                 // Execute the command when Enter key is pressed
                 string command = queryText.Text;
-                _parser.ExecuteCommand(command);
+                var qSearchResult = _parser.ExecuteCommand(command);
+                if (qSearchResult.Success)
+                {
+                    HideWindow();
+                }
+                else
+                {
+                    queryText.Text = qSearchResult.Message;
+                    queryText.SelectAll();
+                }
+
             }
             else if (e.Key == Key.Escape)
             {
@@ -74,19 +87,63 @@ namespace QGo
 
         private void queryText_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (!_isUserEditing) return;
+
+            // Calculate the net change in text length
+            int changeInLength = e.Changes.Sum(change => change.AddedLength - change.RemovedLength);
+
+            if (changeInLength <= 0)
+            {
+                // User is deleting text, do not autocomplete
+                queryText.Background = new SolidColorBrush(Colors.White);
+                return;
+            }
+
             string currentText = queryText.Text;
+
+            if (string.IsNullOrEmpty(currentText))
+            {
+                // Reset styles if text is cleared
+                queryText.Background = new SolidColorBrush(Colors.AntiqueWhite);
+                return;
+            }
+
             var matches = _parser.GetMatchingShortcuts(currentText);
 
             // If there's a matching shortcut, autocomplete the text box
-            foreach (var match in matches)
+            if (matches.Any())
             {
-                queryText.TextChanged -= queryText_TextChanged;
-                queryText.Text = match;
-                queryText.SelectionStart = currentText.Length;
-                queryText.SelectionLength = match.Length - currentText.Length;
-                queryText.TextChanged += queryText_TextChanged;
-                break;
+                var match = matches.First();
+
+                if (match.StartsWith(currentText, StringComparison.OrdinalIgnoreCase) && match != currentText)
+                {
+                    // Temporarily detach the event to prevent recursion
+                    queryText.TextChanged -= queryText_TextChanged;
+
+                    queryText.Background = new SolidColorBrush(Colors.ForestGreen);
+
+                    // Temporarily disable user editing to avoid recursive triggering
+                    _isUserEditing = false;
+
+                    // Preserve user input and autocomplete remaining characters
+                    queryText.Text = match;
+                    queryText.SelectionStart = currentText.Length;
+                    queryText.SelectionLength = match.Length - currentText.Length;
+
+                    queryText.TextChanged += queryText_TextChanged;
+                }
+                else
+                {
+                    // Allow free editing if no valid match starts with the input
+                    queryText.Background = new SolidColorBrush(Colors.White);
+                }
             }
+            else
+            {
+                queryText.Background = new SolidColorBrush(Colors.DarkRed);
+            }
+
+            _isUserEditing = true;
         }
 
         private void HideWindow()
