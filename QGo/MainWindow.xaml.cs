@@ -247,7 +247,38 @@ namespace QGo
         {
             if (e.Key == Key.Back)
             {
-                Console.WriteLine("Backspace key was pressed.");
+                int caretIndex = queryText.CaretIndex;
+                
+                if (queryText.SelectionLength > 0)
+                {
+                    // Remove the highlighted text
+                    int selectionStart = queryText.SelectionStart;
+                    queryText.Text = queryText.Text.Remove(selectionStart, queryText.SelectionLength);
+
+                    // Update the caret position after removing highlighted text
+                    queryText.CaretIndex = selectionStart;
+
+                    // Also delete the character before the original caret position
+                    if (selectionStart > 0)
+                    {
+                        queryText.Text = queryText.Text.Remove(selectionStart - 1, 1);
+                        queryText.CaretIndex = selectionStart - 1;
+                    }
+                }
+                else if (caretIndex > 0)
+                {
+                    // No highlighted text; delete the character before the caret
+                    queryText.Text = queryText.Text.Remove(caretIndex - 1, 1);
+                    queryText.CaretIndex = caretIndex - 1;
+                }
+                /////////////////
+
+                string currentText = new string(currentCharsList.ToArray());
+                if (currentText == queryText.Text)
+                {
+                    return;
+                }
+
                 try
                 {
                     CheckClearReset();
@@ -256,9 +287,11 @@ namespace QGo
 
                     if (currentCharsList.Count() > 0)
                     {
-                        string currentText = new string(currentCharsList.ToArray());
+                        
                         try
                         {
+                            
+
                             Debug.WriteLine($"currentCharslist:'{currentText}'({currentCharsList.Count()}) Removing: '{currentCharsList[currentCharsList.Count() - 1]}' = '{new string(currentCharsList.ToArray())}'. Textbox Text: {queryText.Text}");
                             currentCharsList.RemoveAt(currentCharsList.Count() - 1);
                         }
