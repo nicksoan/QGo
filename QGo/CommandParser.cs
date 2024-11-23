@@ -157,9 +157,9 @@ namespace QGo
 
         public IEnumerable<string> GetMatchingShortcuts(string prefix)
         {
-            foreach (var key in _shortcuts.Keys)
+            foreach (string key in _shortcuts.Keys)
             {
-                if (key.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                if (key.Contains(prefix, StringComparison.OrdinalIgnoreCase))
                 {
                     yield return key;
                 }

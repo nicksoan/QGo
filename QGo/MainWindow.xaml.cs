@@ -1,4 +1,6 @@
 ﻿using Microsoft.Win32;
+using QGo.Models;
+using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -26,8 +28,10 @@ namespace QGo
         private readonly CommandParser _parser;
         private NotifyIcon _notifyIcon;
         private IntPtr _windowHandle;
-        private bool _isUserEditing = true; // Flag to track user edits
         private int _previousTextLength = 0;
+        List<char> currentCharsList = new List<char>();
+        private SolidColorBrush defaultColour = new SolidColorBrush(Colors.White);
+        private SolidColorBrush foundColour = new SolidColorBrush(Colors.LightGreen);
 
         public MainWindow()
         {
@@ -53,6 +57,7 @@ namespace QGo
         {
             if (e.Key == Key.Enter)
             {
+                Debug.WriteLine("Enter pressed!");
                 // Execute the command when Enter key is pressed
                 string command = queryText.Text;
                 var qSearchResult = _parser.ExecuteCommand(command);
@@ -64,8 +69,15 @@ namespace QGo
                 {
                     queryText.Text = qSearchResult.Message;
                     queryText.SelectAll();
+
                 }
 
+            }
+            else if ((e.Key >= Key.A && e.Key <= Key.Z) || // Letters A-Z
+                    (e.Key >= Key.D0 && e.Key <= Key.D9) || // Numbers 0-9 (main keyboard)
+                    (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
+            {
+                AddKeyToCurrentCharArray(e);
             }
             else if (e.Key == Key.Escape)
             {
@@ -74,40 +86,55 @@ namespace QGo
             }
         }
 
-        private void queryText_TextChanged(object sender, TextChangedEventArgs e)
+        private void AddKeyToCurrentCharArray(System.Windows.Input.KeyEventArgs e)
         {
-            if (!_isUserEditing)
+            string keyString = e.Key.ToString().ToLower();
+            char newChar;
+
+            // Convert numeric keys to their actual characters
+            if (e.Key >= Key.D0 && e.Key <= Key.D9)
             {
-                // Update previous text length and return
-                _previousTextLength = queryText.Text.Length;
-                return;
+                newChar = (char)('0' + (e.Key - Key.D0)); // Convert Key.D0 to '0', Key.D1 to '1', etc.
+            }
+            else
+            {
+                // Convert letters
+                newChar = keyString[0]; // Take the first character of the Key's name
             }
 
-            string currentText = queryText.Text;
+            string currentText = new string(currentCharsList.ToArray());
+            currentCharsList.Add(newChar);
+            Debug.WriteLine($"currentCharslist:'{new string(currentText)}'({currentCharsList.Count()}) Adding: '{newChar}'. = '{new string(currentCharsList.ToArray())}' Textbox Text: {queryText.Text}");
 
-            // Determine if the user is deleting text
-            bool isDeleting = currentText.Length < _previousTextLength;
 
+        }
+
+        private void queryText_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CheckClearReset();
+
+            bool isDeleting = currentCharsList.Count() < _previousTextLength;
+
+            // Check if user is deleting text,so do not trigger autocomplete
             if (isDeleting)
             {
-                // User is deleting text, do not autocomplete
-                queryText.Background = new SolidColorBrush(Colors.White);
-                _previousTextLength = currentText.Length;
+                queryText.Background = defaultColour;
                 return;
             }
 
             // Proceed with autocomplete logic
-            AutocompleteText(currentText);
+            string autoCompleteTemp = new string(currentCharsList.ToArray());
+            AutocompleteText(autoCompleteTemp);
 
             // Update previous text length
-            _previousTextLength = queryText.Text.Length;
+            _previousTextLength = currentCharsList.Count();
         }
 
         private void AutocompleteText(string currentText)
         {
             if (string.IsNullOrEmpty(currentText))
             {
-                queryText.Background = new SolidColorBrush(Colors.AntiqueWhite);
+                queryText.Background = defaultColour;
                 return;
             }
 
@@ -117,38 +144,58 @@ namespace QGo
             {
                 var match = matches.First();
 
-                if (match.StartsWith(currentText, StringComparison.OrdinalIgnoreCase) && match != currentText)
+                if (match.StartsWith(currentText, StringComparison.OrdinalIgnoreCase))
                 {
-                    // Temporarily detach event handler
-                    queryText.TextChanged -= queryText_TextChanged;
-                    _isUserEditing = false;
-
-                    try
-                    {
-                        queryText.Background = new SolidColorBrush(Colors.ForestGreen);
-
-                        // Append remaining text without selecting
-                        string remainingText = match.Substring(currentText.Length);
-                        queryText.Text = currentText + remainingText;
-                        queryText.SelectionLength = remainingText.Length;
-                        queryText.SelectionStart = currentText.Length;
-                        //queryText.SelectionStart = queryText.Text.Length;
-                    }
-                    finally
-                    {
-                        _isUserEditing = true;
-                        queryText.TextChanged += queryText_TextChanged;
-                    }
+                    ApplyFoundQuery(currentText, match);
+                }
+                else if (currentText.Length > 3 && match.Contains(currentText, StringComparison.OrdinalIgnoreCase))
+                {
+                    ApplyFoundQuery(currentText, match);
                 }
                 else
                 {
-                    queryText.Background = new SolidColorBrush(Colors.White);
+                    queryText.Background = defaultColour;
                 }
             }
             else
             {
-                queryText.Background = new SolidColorBrush(Colors.DarkRed);
+                queryText.Background = defaultColour;
             }
+        }
+
+        private void ApplyFoundQuery(string currentText, string match)
+        {
+            // Temporarily detach event handler
+            queryText.TextChanged -= queryText_TextChanged;
+
+            try
+            {
+                queryText.Background = foundColour;
+                int currentCursorPosition = queryText.CaretIndex;
+                int cursorPosition = FindOverlapIndex(match, currentText);
+                string remainingText = match.Substring(currentText.Length);
+                queryText.Text = match;//currentText + remainingText;
+                queryText.SelectionStart = cursorPosition;//currentText.Length;
+                queryText.SelectionLength = match.Length - cursorPosition;//remainingText.Length;
+                queryText.Focus();
+            }
+            finally
+            {
+                queryText.TextChanged += queryText_TextChanged;
+            }
+        }
+
+        private int FindOverlapIndex(string match, string enteredText)
+        {
+            // Find where the entered text aligns with the match
+            int index = match.IndexOf(enteredText, StringComparison.InvariantCultureIgnoreCase);
+            if (index >= 0)
+            {
+                return index + enteredText.Length; // End of the overlap
+            }
+
+            // Fallback: If no clear overlap, place the cursor at the end of the match
+            return match.Length;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -162,8 +209,6 @@ namespace QGo
             _windowHandle = new WindowInteropHelper(this).Handle;
             RegisterHotKey();
         }
-
-        
 
         private void HideWindow()
         {
@@ -192,11 +237,57 @@ namespace QGo
             ShowWindow();
         }
 
-
         private void mnuEditShortcuts_Click(object sender, RoutedEventArgs e)
         {
             var editShortcutsWindow = new EditShortcutsWindow();
             editShortcutsWindow.Show();
+        }
+
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == Key.Back)
+            {
+                Console.WriteLine("Backspace key was pressed.");
+                try
+                {
+                    CheckClearReset();
+
+                    _previousTextLength = currentCharsList.Count;
+
+                    if (currentCharsList.Count() > 0)
+                    {
+                        string currentText = new string(currentCharsList.ToArray());
+                        try
+                        {
+                            Debug.WriteLine($"currentCharslist:'{currentText}'({currentCharsList.Count()}) Removing: '{currentCharsList[currentCharsList.Count() - 1]}' = '{new string(currentCharsList.ToArray())}'. Textbox Text: {queryText.Text}");
+                            currentCharsList.RemoveAt(currentCharsList.Count() - 1);
+                        }
+                        catch (Exception)
+                        {
+                            currentCharsList.Clear();
+                            _previousTextLength = 0;
+                        }
+
+                    }
+                    else
+                    {
+                        Debug.WriteLine("No chars left");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Ex:{ex.Message}. currentCharsList: {currentCharsList.Count()}");
+                }
+            }
+        }
+
+        private void CheckClearReset()
+        {
+            if (queryText.Text.Length == 0)
+            {
+                currentCharsList.Clear();
+                _previousTextLength = 0;
+            }
         }
     }
 }

@@ -6,12 +6,12 @@
         xmlns:local="clr-namespace:QGo"
         
         mc:Ignorable="d"
-        KeyDown="Window_KeyDown" Loaded="MainWindow_Loaded" WindowStyle="None"
-        Title="MainWindow" Height="50" Width="250">
+        KeyDown="Window_KeyDown" PreviewKeyDown="Window_PreviewKeyDown" Loaded="MainWindow_Loaded" WindowStyle="ThreeDBorderWindow"
+        Title="MainWindow" Height="100" Width="500">
     <Grid>
         <StackPanel>
            
-            <TextBox Background="Beige" Height="50" FontSize="24" Name="queryText" TextChanged="queryText_TextChanged">
+            <TextBox Background="Beige" Height="100" FontSize="24" Name="queryText" TextChanged="queryText_TextChanged">
                 <TextBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Name="mnuEditShortcuts" Header="Edit Shortcuts" Click="mnuEditShortcuts_Click" />

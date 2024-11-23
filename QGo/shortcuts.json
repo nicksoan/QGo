@@ -6,5 +6,6 @@
   "networkshare": "\\\\server\\sharedfolder",
   "youtube": "https://youtube.com",
   "reddit": "https://reddit.com",
-  "github": "https://github.com/"
+  "github": "https://github.com/",
+  "temp": "C:\temp"
 }
