@@ -26,7 +26,7 @@
     <None Update="Images\98208_q_icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="shortcuts.json">
+    <None Update="Data\shortcuts.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

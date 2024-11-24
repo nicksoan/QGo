@@ -10,7 +10,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace QGo
+namespace QGo.Functions
 {
     public class CommandParser
     {
@@ -19,9 +19,9 @@ namespace QGo
         private static readonly Regex UncPathRegex = new Regex(@"^\\\\", RegexOptions.IgnoreCase);
         private static readonly Regex LocalPathRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.IgnoreCase);
         private readonly Dictionary<string, string> _shortcuts;
-        public CommandParser()
+        public CommandParser(string jsonLocation)
         {
-            _shortcuts = LoadShortcuts("shortcuts.json");
+            _shortcuts = LoadShortcuts(jsonLocation);
         }
         public QSearchResult ExecuteCommand(string command)
         {
@@ -71,7 +71,7 @@ namespace QGo
                 else
                 {
                     searchResult.Success = false;
-                    searchResult.Message = "Unknown Command";
+                    searchResult.Message = "";
                     return searchResult;
                 }
             }
