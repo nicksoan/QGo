@@ -21,6 +21,7 @@ using System.Windows.Threading;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Color = System.Windows.Media.Color;
 using TextBox = System.Windows.Controls.TextBox;
+using Application = System.Windows.Application;
 
 
 namespace QGo
@@ -39,19 +40,18 @@ namespace QGo
         private readonly CommandParser _parser;
         private UIService _uiService;
 
+        public const string relativePathShortcuts = @"Data\shortcuts.json";
+        public const string relativePathUserSettings = @"Data\UserSettings.json";
+
+        string fullPathShortcuts = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePathShortcuts);
+        string fullPathUserSettings = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePathUserSettings);
+
+
         private UserSettings _settings;
 
         public MainWindow()
         {
-            string relativePathShortcuts = @"Data\shortcuts.json";
-            string relativePathUserSettings = @"Data\UserSettings.json";
-
-            // Combine with the application's base directory
-            string fullPathShortcuts = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePathShortcuts);
-            string fullPathUserSettings = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePathUserSettings);
-
             _settings = new UserSettings(fullPathUserSettings);
-
             _parser = new CommandParser(fullPathShortcuts);
 
             InitializeComponent();
@@ -319,7 +319,7 @@ namespace QGo
 
         private void mnuEditShortcuts_Click(object sender, RoutedEventArgs e)
         {
-            var editShortcutsWindow = new EditShortcutsWindow();
+            var editShortcutsWindow = new EditShortcutsWindow(fullPathShortcuts);
             editShortcutsWindow.Show();
         }
 
@@ -348,6 +348,11 @@ namespace QGo
             _settings.WindowHeight = this.Height;
             
             _settings.Save();
+        }
+
+        private void mnuQuit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

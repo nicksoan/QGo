@@ -24,11 +24,12 @@ namespace QGo
     /// </summary>
     public partial class EditShortcutsWindow : Window
     {
-        private string filePath = "shortcuts.json";
+        private readonly string _filePath;
         private Dictionary<string, string> shortcuts;
 
-        public EditShortcutsWindow()
+        public EditShortcutsWindow(string filePath)
         {
+            _filePath = filePath;
             InitializeComponent();
             LoadShortcuts();
             InitializePlaceholders();
@@ -36,9 +37,9 @@ namespace QGo
 
         private void LoadShortcuts()
         {
-            if (File.Exists(filePath))
+            if (File.Exists(_filePath))
             {
-                var json = File.ReadAllText(filePath);
+                var json = File.ReadAllText(_filePath);
                 shortcuts = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
             }
             else
@@ -50,7 +51,7 @@ namespace QGo
 
         private void RefreshListView()
         {
-            ShortcutsListView.ItemsSource = shortcuts.Select(kvp => new { Key = kvp.Key, Value = kvp.Value }).ToList();
+            ShortcutsListView.ItemsSource = shortcuts.Select(kvp => new Models.Shortcut { Key = kvp.Key, Value = kvp.Value }).ToList();
         }
 
         private void AddShortcut_Click(object sender, RoutedEventArgs e)
@@ -124,7 +125,7 @@ namespace QGo
         private void SaveShortcuts()
         {
             var json = JsonSerializer.Serialize(shortcuts, new JsonSerializerOptions { WriteIndented = true });
-            File.WriteAllText(filePath, json);
+            File.WriteAllText(_filePath, json);
         }
 
         private void ClearInputs()
@@ -174,6 +175,22 @@ namespace QGo
             {
                 SetPlaceholder(textBox);
             }
+        }
+
+        private void ShortcutsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ShortcutsListView.SelectedItem is Models.Shortcut selectedItem)
+            {
+                KeyTextBox.Text = selectedItem.Key;
+                ValueTextBox.Text = selectedItem.Value;
+                KeyTextBox.Foreground = Brushes.Black;
+                ValueTextBox.Foreground = Brushes.Black;
+            }
+        }
+
+        private void Close_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

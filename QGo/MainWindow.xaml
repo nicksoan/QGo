@@ -33,6 +33,7 @@
                 <ContextMenu>
                     <MenuItem Name="mnuEditShortcuts" Header="Edit Shortcuts" Click="mnuEditShortcuts_Click" />
                     <MenuItem Name="mnuUserSettings" Header="Settings" Click="mnuUserSettings_Click" />
+                    <MenuItem Name="mnuQuit" Header="Quit" Click="mnuQuit_Click" />
                 </ContextMenu>
             </TextBox.ContextMenu>
         </TextBox>

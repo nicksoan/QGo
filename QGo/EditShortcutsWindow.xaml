@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:QGo"
         xmlns:behaviors="clr-namespace:WPFTextBoxAutoComplete;assembly=WPFTextBoxAutoComplete"
         mc:Ignorable="d"
-        Title="EditShortcutsWindow" Height="450" Width="800">
+        Title="EditShortcutsWindow" Height="450" Width="600">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -21,7 +21,7 @@
         </StackPanel>
 
         <!-- Shortcuts List -->
-        <ListView x:Name="ShortcutsListView" Grid.Row="1" Margin="0 0 0 10">
+        <ListView x:Name="ShortcutsListView" Grid.Row="1" Margin="0 0 0 10" SelectionChanged="ShortcutsListView_SelectionChanged">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Key" DisplayMemberBinding="{Binding Key}" Width="200"/>
@@ -34,7 +34,8 @@
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
             <Button Content="Add" Click="AddShortcut_Click" Width="75" Margin="0 0 10 0"/>
             <Button Content="Update" Click="UpdateShortcut_Click" Width="75" Margin="0 0 10 0"/>
-            <Button Content="Delete" Click="DeleteShortcut_Click" Width="75" />
+            <Button Content="Delete" Click="DeleteShortcut_Click" Width="75" Margin="0 0 10 0" />
+            <Button Content="Close" Click="Close_Click" Width="75" />
         </StackPanel>
     </Grid>
 </Window>
