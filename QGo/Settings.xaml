@@ -1,0 +1,56 @@
+﻿<Window x:Class="QGo.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QGo"
+        mc:Ignorable="d"
+        Title="Settings" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="0.5*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Window Color -->
+        <Label Grid.Row="0" Grid.Column="0" Content="Background Default Color:" Margin="0,5,5,5"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Name="txtWindowColor" Margin="0,5,0,5" />
+        <Button Grid.Row="0" Grid.Column="2" Name="btnWindowColor" Content="Pick" Margin="0,5,0,5" Click="btnWindowColor_Click"/>
+
+        <!-- Found Color -->
+        <Label Grid.Row="1" Grid.Column="0" Content="Background Found Match Color:" Margin="0,5,5,5"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Name="txtFoundMatch" Margin="0,5,0,5" />
+        <Button Grid.Row="1" Grid.Column="2" Name="btnFoundMatch" Content="Pick" Margin="0,5,0,5" Click="btnFoundMatch_Click"/>
+
+        <!-- Font Colour -->
+        <Label Grid.Row="2" Grid.Column="0" Content="Font Colour:" Margin="0,5,5,5"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Name="txtFontColour" Margin="0,5,0,5"/>
+        <Button Grid.Row="2" Grid.Column="2" Name="btnFontColour" Content="Pick" Margin="0,5,0,5" Click="btnFontColour_Click"/>
+        
+        <!-- Font Colour Found-->
+        <Label Grid.Row="3" Grid.Column="0" Content="Font Colour Found:" Margin="0,5,5,5"/>
+        <TextBox Grid.Row="3" Grid.Column="1" Name="txtFontColourFound" Margin="0,5,0,5"/>
+        <Button Grid.Row="3" Grid.Column="2" Name="btnFontColourFound" Content="Pick" Margin="0,5,0,5" Click="btnFontColourFound_Click"/>
+
+        <!-- Font Size -->
+        <Label Grid.Row="4" Grid.Column="0" Content="Font Size:" Margin="0,5,5,5"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Name="txtFontSize" Margin="0,5,0,5"/>
+
+        <!-- Save Button -->
+        <Button Grid.Row="8" Grid.Column="1" Content="Save" HorizontalAlignment="Right" Width="80" Click="SaveButton_Click"/>
+    </Grid>
+</Window>

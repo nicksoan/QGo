@@ -30,36 +30,47 @@ namespace QGo
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly CommandParser _parser;
         private NotifyIcon _notifyIcon;
         private IntPtr _windowHandle;
         private int _previousTextLength = 0;
         List<char> currentCharsList = new List<char>();
-        private SolidColorBrush defaultColour = new SolidColorBrush(Colors.White);
+        //private SolidColorBrush defaultColour = new SolidColorBrush(Colors.White);
         private SolidColorBrush foundColour = new SolidColorBrush(Colors.LightGreen);
+        private readonly CommandParser _parser;
         private UIService _uiService;
+
+        private UserSettings _settings;
 
         public MainWindow()
         {
-            string relativePath = @"Data\shortcuts.json";
+            string relativePathShortcuts = @"Data\shortcuts.json";
+            string relativePathUserSettings = @"Data\UserSettings.json";
 
             // Combine with the application's base directory
-            string fullPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePath);
+            string fullPathShortcuts = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePathShortcuts);
+            string fullPathUserSettings = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relativePathUserSettings);
 
+            _settings = new UserSettings(fullPathUserSettings);
 
-            _parser = new CommandParser(fullPath);
+            _parser = new CommandParser(fullPathShortcuts);
+
             InitializeComponent();
             InitializeNotifyIcon();
             Loaded += MainWindow_Loaded;
             SourceInitialized += MainWindow_SourceInitialized;
 
             _uiService = new UIService(
+                window: this,
                 textBox: queryText,
                 currentCharsList: currentCharsList,
                 textChangedHandler: queryText_TextChanged,
-                defaultColour: null,
-                _previousTextLength
+                userSettings: _settings,
+                previousTextLength: _previousTextLength,
+                commandParser: _parser
                 );
+
+            _uiService.RestoreWindowPosition();
+
         }
 
         private void InitializeNotifyIcon()
@@ -137,13 +148,13 @@ namespace QGo
             // Check if user is deleting text,so do not trigger autocomplete
             if (isDeleting)
             {
-                _uiService.SetDefaultBGColour();
+                _uiService.SetTextBoxDefault();
                 return;
             }
 
             // Proceed with autocomplete logic
             string autoCompleteTemp = new string(currentCharsList.ToArray());
-            AutocompleteText(autoCompleteTemp);
+            _uiService.AutocompleteText(autoCompleteTemp);
 
             // Update previous text length
             _previousTextLength = currentCharsList.Count();
@@ -172,7 +183,7 @@ namespace QGo
 
                 if (currentText == queryText.Text)
                 {
-                    _uiService.SetDefaultBGColour();
+                    _uiService.SetTextBoxDefault();
                 }
 
                 _uiService.CheckClearReset();
@@ -234,62 +245,31 @@ namespace QGo
             }
         }
 
-        private void AutocompleteText(string currentText)
-        {
-            if (string.IsNullOrEmpty(currentText))
-            {
-                _uiService.SetDefaultBGColour();
-                return;
-            }
 
-            var matches = _parser.GetMatchingShortcuts(currentText);
 
-            if (matches.Any())
-            {
-                var match = matches.First();
+        //private void ApplyFoundQuery(string currentText, string match)
+        //{
+        //    // Temporarily detach event handler
+        //    queryText.TextChanged -= queryText_TextChanged;
 
-                if (match.StartsWith(currentText, StringComparison.OrdinalIgnoreCase))
-                {
-                    ApplyFoundQuery(currentText, match);
-                }
-                else if (currentText.Length > 3 && match.Contains(currentText, StringComparison.OrdinalIgnoreCase))
-                {
-                    ApplyFoundQuery(currentText, match);
-                }
-                else
-                {
-                    _uiService.SetDefaultBGColour();
-                }
-            }
-            else
-            {
-                _uiService.SetDefaultBGColour();
-            }
-        }
+        //    try
+        //    {
+        //        queryText.Background = foundColour;
+        //        int currentCursorPosition = queryText.CaretIndex;
+        //        int cursorPosition = MatchFunctions.FindOverlapIndex(match, currentText);
+        //        string remainingText = match.Substring(currentText.Length);
+        //        queryText.Text = match;//currentText + remainingText;
+        //        queryText.SelectionStart = cursorPosition;//currentText.Length;
+        //        queryText.SelectionLength = match.Length - cursorPosition;//remainingText.Length;
+        //        queryText.Focus();
+        //        Debug.WriteLine($"currentCharsList: '{new string(currentCharsList.ToArray())}'.queryText: '{queryText.Text}'");
 
-        private void ApplyFoundQuery(string currentText, string match)
-        {
-            // Temporarily detach event handler
-            queryText.TextChanged -= queryText_TextChanged;
-
-            try
-            {
-                queryText.Background = foundColour;
-                int currentCursorPosition = queryText.CaretIndex;
-                int cursorPosition = MatchFunctions.FindOverlapIndex(match, currentText);
-                string remainingText = match.Substring(currentText.Length);
-                queryText.Text = match;//currentText + remainingText;
-                queryText.SelectionStart = cursorPosition;//currentText.Length;
-                queryText.SelectionLength = match.Length - cursorPosition;//remainingText.Length;
-                queryText.Focus();
-                Debug.WriteLine($"currentCharsList: '{new string(currentCharsList.ToArray())}'.queryText: '{queryText.Text}'");
-
-            }
-            finally
-            {
-                queryText.TextChanged += queryText_TextChanged;
-            }
-        }
+        //    }
+        //    finally
+        //    {
+        //        queryText.TextChanged += queryText_TextChanged;
+        //    }
+        //}
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -307,6 +287,13 @@ namespace QGo
         {
             this.Hide();
             _notifyIcon.Visible = true;
+        }
+
+        public void UpdateUserSettings(UserSettings updatedSettings)
+        {
+            _settings = updatedSettings;
+            _uiService.UpdateUserSettings(updatedSettings);
+            // Apply the updated settings to the UI or other components as needed
         }
 
         private void ShowWindow()
@@ -336,6 +323,31 @@ namespace QGo
             editShortcutsWindow.Show();
         }
 
+        private void mnuUserSettings_Click(object sender, RoutedEventArgs e)
+        {
+            var userSettingsWindow = new Settings(_settings, this);
+            userSettingsWindow.Show();
+        }
 
+        private void Rectangle_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                DragMove();
+
+                _settings.WindowPositionX = this.Left;
+                _settings.WindowPositionY = this.Top;
+
+                _settings.Save();
+            }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            _settings.WindowWidth = this.Width;
+            _settings.WindowHeight = this.Height;
+            
+            _settings.Save();
+        }
     }
 }

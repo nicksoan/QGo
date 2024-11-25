@@ -16,10 +16,14 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="WPFTextBoxAutoComplete" Version="1.0.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Data\UserSettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Images\98208_q_icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
