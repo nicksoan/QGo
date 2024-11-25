@@ -192,5 +192,51 @@ namespace QGo
         {
             this.Close();
         }
+
+        private void ExportShortcuts_Click(object sender, RoutedEventArgs e)
+        {
+             var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                DefaultExt = "json",
+                FileName = "shortcuts.json"
+            };
+
+
+            if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var json = JsonSerializer.Serialize(shortcuts, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(saveFileDialog.FileName, json);
+                MessageBox.Show("Shortcuts exported successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void ImportShortcuts_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*",
+                DefaultExt = "json"
+            };
+
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var json = File.ReadAllText(openFileDialog.FileName);
+                var importedShortcuts = JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+
+                if (importedShortcuts != null)
+                {
+                    shortcuts = importedShortcuts;
+                    SaveShortcuts();
+                    RefreshListView();
+                    MessageBox.Show("Shortcuts imported successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Failed to import shortcuts.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+
+        }
     }
 }

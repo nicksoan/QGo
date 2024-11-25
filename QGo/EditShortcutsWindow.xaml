@@ -35,6 +35,8 @@
             <Button Content="Add" Click="AddShortcut_Click" Width="75" Margin="0 0 10 0"/>
             <Button Content="Update" Click="UpdateShortcut_Click" Width="75" Margin="0 0 10 0"/>
             <Button Content="Delete" Click="DeleteShortcut_Click" Width="75" Margin="0 0 10 0" />
+            <Button Content="Export" Click="ExportShortcuts_Click" Width="75" Margin="0 0 10 0"/>
+            <Button Content="Import" Click="ImportShortcuts_Click" Width="75" Margin="0 0 10 0" />
             <Button Content="Close" Click="Close_Click" Width="75" />
         </StackPanel>
     </Grid>
