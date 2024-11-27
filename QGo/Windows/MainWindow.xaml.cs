@@ -1,30 +1,15 @@
-﻿using Microsoft.Win32;
-using QGo.Functions;
+﻿using QGo.Functions;
 using QGo.Models;
 using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Color = System.Windows.Media.Color;
-using TextBox = System.Windows.Controls.TextBox;
 using Application = System.Windows.Application;
 
 
-namespace QGo
+namespace QGo.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -293,7 +278,7 @@ namespace QGo
         {
             _settings = updatedSettings;
             _uiService.UpdateUserSettings(updatedSettings);
-            // Apply the updated settings to the UI or other components as needed
+            RegisterHotKey();
         }
 
         private void ShowWindow()
@@ -352,7 +337,7 @@ namespace QGo
         {
             _settings.WindowWidth = this.Width;
             _settings.WindowHeight = this.Height;
-            
+
             _settings.Save();
         }
 

@@ -1,9 +1,9 @@
-﻿<Window x:Class="QGo.Settings"
+﻿<Window x:Class="QGo.Windows.Settings"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:QGo"
+        xmlns:local="clr-namespace:QGo.Windows"
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800">
     <Grid Margin="10">
@@ -49,6 +49,12 @@
         <!-- Font Size -->
         <Label Grid.Row="4" Grid.Column="0" Content="Font Size:" Margin="0,5,5,5"/>
         <TextBox Grid.Row="4" Grid.Column="1" Name="txtFontSize" Margin="0,5,0,5"/>
+
+        <!-- Shortcut Recording -->
+        <Label Grid.Row="5" Grid.Column="0" Content="Shortcut:" Margin="0,5,5,5"/>
+        <TextBox Grid.Row="5" Grid.Column="1" Name="txtShortcut" Margin="0,5,0,5" IsReadOnly="True"/>
+        <Button Grid.Row="5" Grid.Column="2" Name="btnRecordShortcut" Content="Record" Margin="0,5,0,5" Click="btnRecordShortcut_Click"/>
+
 
         <!-- Save Button -->
         <Button Grid.Row="8" Grid.Column="1" Content="Save" HorizontalAlignment="Right" Width="80" Click="SaveButton_Click"/>

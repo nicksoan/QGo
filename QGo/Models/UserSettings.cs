@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using QGo.Functions;
 using System.IO;
 using System.Windows.Input;
 
@@ -18,7 +20,10 @@ namespace QGo.Models
         public double WindowWidth { get; set; } = 150;
         public double WindowHeight { get; set; } = 50;
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public Key HotKey { get; set; } = Key.Q;
+
+        [JsonConverter(typeof(ModifierKeysListConverter))]
         public List<ModifierKeys> HotKeyModifiers { get; set; } = new List<ModifierKeys> { ModifierKeys.Alt };
 
 

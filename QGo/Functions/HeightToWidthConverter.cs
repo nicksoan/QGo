@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace QGo
+namespace QGo.Functions
 {
     public class HeightToWidthConverter : IValueConverter
     {

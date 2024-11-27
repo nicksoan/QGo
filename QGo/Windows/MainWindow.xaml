@@ -1,24 +1,21 @@
-﻿<Window x:Class="QGo.MainWindow"
+﻿<Window x:Class="QGo.Windows.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:QGo"
-        
+        xmlns:local="clr-namespace:QGo.Windows"
+        xmlns:functions="clr-namespace:QGo.Functions"
         mc:Ignorable="d"
         KeyDown="Window_KeyDown" PreviewKeyDown="Window_PreviewKeyDown" Loaded="MainWindow_Loaded" WindowStyle="None" SizeChanged="Window_SizeChanged"
         Title="MainWindow" Height="100" Width="500">
     <Window.Resources>
-        <local:HeightToWidthConverter x:Key="HeightToWidthConverter"/>
+        <functions:HeightToWidthConverter x:Key="HeightToWidthConverter"/>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="15"/>
-            <!-- Width of the draggable area -->
             <ColumnDefinition Width="*"/>
-            <!-- Remaining width for the TextBox -->
         </Grid.ColumnDefinitions>
-        <!--<Rectangle Fill="Transparent" VerticalAlignment="Stretch" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" Cursor="SizeAll"/>-->
         <Grid Grid.Column="0" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" Cursor="SizeAll">
             <Rectangle Fill="Transparent"/>
             <TextBlock Text="QGo" VerticalAlignment="Top" Margin="0 2 0 0" HorizontalAlignment="Center" Foreground="Black"

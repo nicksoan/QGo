@@ -17,7 +17,7 @@ using Brushes = System.Windows.Media.Brushes;
 using MessageBox = System.Windows.MessageBox;
 using TextBox = System.Windows.Controls.TextBox;
 
-namespace QGo
+namespace QGo.Windows
 {
     /// <summary>
     /// Interaction logic for EditShortcutsWindow.xaml
