@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.IO;
+using System.Windows.Input;
 
 namespace QGo.Models
 {
@@ -16,6 +17,10 @@ namespace QGo.Models
 
         public double WindowWidth { get; set; } = 150;
         public double WindowHeight { get; set; } = 50;
+
+        public Key HotKey { get; set; } = Key.Q;
+        public List<ModifierKeys> HotKeyModifiers { get; set; } = new List<ModifierKeys> { ModifierKeys.Alt };
+
 
         private readonly string _settingsFilePath = "";
 

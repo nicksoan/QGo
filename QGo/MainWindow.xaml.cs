@@ -308,7 +308,13 @@ namespace QGo
         {
             if (_windowHandle != IntPtr.Zero)
             {
-                HotKey.RegisterHotKey(_windowHandle, Key.Q, ModifierKeys.Alt, OnHotKeyHandler);
+                ModifierKeys combinedModifiers = ModifierKeys.None;
+                foreach (var modifier in _settings.HotKeyModifiers)
+                {
+                    combinedModifiers |= modifier;
+                }
+
+                HotKey.RegisterHotKey(_windowHandle, _settings.HotKey, combinedModifiers, OnHotKeyHandler);
             }
         }
 

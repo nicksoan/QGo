@@ -7,5 +7,7 @@
   "WindowPositionX": 100.0,
   "WindowPositionY": 100.0,
   "WindowWidth": 150.0,
-  "WindowHeight": 50.0
+  "WindowHeight": 50.0,
+  "HotKey": "Q",
+  "HotKeyModifiers": ["Alt"]
 }

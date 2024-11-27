@@ -23,7 +23,7 @@ public class HotKey
         _windowHandle = windowHandle;
         _hotKeyId = _hotKeyId + 1;
 
-        RegisterHotKey(_windowHandle, _hotKeyId, (uint)(MOD_ALT | MOD_CONTROL), (uint)KeyInterop.VirtualKeyFromKey(key));
+        RegisterHotKey(_windowHandle, _hotKeyId, (uint)modifierKeys, (uint)KeyInterop.VirtualKeyFromKey(key));
         ComponentDispatcher.ThreadPreprocessMessage += ThreadPreprocessMessageMethod;
     }
 
