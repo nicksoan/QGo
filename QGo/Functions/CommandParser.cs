@@ -18,10 +18,12 @@ namespace QGo.Functions
         private static readonly Regex WebsiteRegex = new Regex(@"^(http|https)://", RegexOptions.IgnoreCase);
         private static readonly Regex UncPathRegex = new Regex(@"^\\\\", RegexOptions.IgnoreCase);
         private static readonly Regex LocalPathRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.IgnoreCase);
-        private readonly Dictionary<string, string> _shortcuts;
+        private Dictionary<string, string> _shortcuts;
+        private readonly string _jsonLocation = "";
         public CommandParser(string jsonLocation)
         {
-            _shortcuts = LoadShortcuts(jsonLocation);
+            _jsonLocation = jsonLocation;
+            _shortcuts = LoadShortcuts(_jsonLocation);
         }
         public QSearchResult ExecuteCommand(string command)
         {
@@ -154,6 +156,12 @@ namespace QGo.Functions
 
             return new Dictionary<string, string>();
         }
+
+        public void RefreshShortuts()
+        {
+            _shortcuts = LoadShortcuts(_jsonLocation);
+        }
+
 
         public IEnumerable<string> GetMatchingShortcuts(string prefix)
         {

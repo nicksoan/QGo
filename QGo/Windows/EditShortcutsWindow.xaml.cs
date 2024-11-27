@@ -26,13 +26,14 @@ namespace QGo.Windows
     {
         private readonly string _filePath;
         private Dictionary<string, string> shortcuts;
-
-        public EditShortcutsWindow(string filePath)
+        private MainWindow mainWindow;
+        public EditShortcutsWindow(string filePath, MainWindow mainWindow)
         {
             _filePath = filePath;
             InitializeComponent();
             LoadShortcuts();
             InitializePlaceholders();
+            this.mainWindow = mainWindow;
         }
 
         private void LoadShortcuts()
@@ -75,6 +76,8 @@ namespace QGo.Windows
             SaveShortcuts();
             RefreshListView();
             ClearInputs();
+            mainWindow.UpdateUserShortcuts();
+            
         }
 
         private void UpdateShortcut_Click(object sender, RoutedEventArgs e)
@@ -94,10 +97,11 @@ namespace QGo.Windows
                 return;
             }
 
-            shortcuts[key] = value;
+            shortcuts[key] = value.ToLower();
             SaveShortcuts();
             RefreshListView();
             ClearInputs();
+            mainWindow.UpdateUserShortcuts();
         }
 
         private void DeleteShortcut_Click(object sender, RoutedEventArgs e)
@@ -120,6 +124,7 @@ namespace QGo.Windows
             SaveShortcuts();
             RefreshListView();
             ClearInputs();
+            mainWindow.UpdateUserShortcuts();
         }
 
         private void SaveShortcuts()

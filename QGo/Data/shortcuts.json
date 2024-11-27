@@ -1,11 +1,12 @@
 {
   "": "",
   "google": "https://google.com",
-  "docs": "https://docs.microsoft.com",
-  "workfolder": "C:\\Users\\Nick\\Documents\\Work",
+  "documents": "C:\\Users\\MyUserName\\Documents\\Work",
   "networkshare": "\\\\server\\sharedfolder",
   "youtube": "https://youtube.com",
   "reddit": "https://reddit.com",
   "github": "https://github.com/",
-  "temp": "C:\temp"
+  "temp": "C:\temp",
+  "qgo": "https://github.com/nicksoan/QGo"
+
 }

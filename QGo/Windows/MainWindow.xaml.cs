@@ -274,6 +274,11 @@ namespace QGo.Windows
             _notifyIcon.Visible = true;
         }
 
+        public void UpdateUserShortcuts()
+        {
+         _parser.RefreshShortuts();
+        }
+
         public void UpdateUserSettings(UserSettings updatedSettings)
         {
             _settings = updatedSettings;
@@ -310,7 +315,7 @@ namespace QGo.Windows
 
         private void mnuEditShortcuts_Click(object sender, RoutedEventArgs e)
         {
-            var editShortcutsWindow = new EditShortcutsWindow(fullPathShortcuts);
+            var editShortcutsWindow = new EditShortcutsWindow(fullPathShortcuts,this);
             editShortcutsWindow.Show();
         }
 
