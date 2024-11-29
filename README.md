@@ -1,6 +1,8 @@
 # QGo
 
 QGo is a versatile command parser application that allows users to execute various types of commands, including opening websites, accessing UNC paths, local folders, and running executable files. 
+<img width="180" alt="image" src="https://github.com/user-attachments/assets/b0b9b9f4-21f8-4dc8-9c26-9ac6841f6c83">
+
 
 ## Features
 
@@ -11,6 +13,11 @@ QGo is a versatile command parser application that allows users to execute vario
 - **Custom Shortcuts**: Define and use custom shortcuts for frequently used commands.
 
 - **Parameterisation**: Each command can be parameterised.
+<img width="180" alt="image" src="https://github.com/user-attachments/assets/3a36110b-8074-4ea9-8eb5-cbe19d8fd78a">
+
+<img width="538" alt="image" src="https://github.com/user-attachments/assets/2541bf29-fb0b-46d3-99a9-a3348351e822">
+
+
 
 ## Usage
 
@@ -56,3 +63,12 @@ Right click on the input box and select "Edit Shortcuts" to open the list of Com
 Shortcuts are also defined in a JSON file which can be edited, but the program will require you to restart to register the changes. The shortcuts.json file is located in the Data folder where your QGo executable is stored.
 
 #### Example `shortcuts.json`
+
+### ToDo/Future Updates
+
+#### WIP Improvements
+- Update Taskbar icon
+- 
+
+#### Future Plans
+- V2 restructuring to allow plugins
