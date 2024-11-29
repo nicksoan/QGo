@@ -13,9 +13,12 @@ QGo is a versatile command parser application that allows users to execute vario
 - **Custom Shortcuts**: Define and use custom shortcuts for frequently used commands.
 
 - **Parameterisation**: Each command can be parameterised.
-<img width="180" alt="image" src="https://github.com/user-attachments/assets/3a36110b-8074-4ea9-8eb5-cbe19d8fd78a">
 
-<img width="538" alt="image" src="https://github.com/user-attachments/assets/2541bf29-fb0b-46d3-99a9-a3348351e822">
+  
+Example to Google "Hello World"
+|<img width="180" alt="image" src="https://github.com/user-attachments/assets/3a36110b-8074-4ea9-8eb5-cbe19d8fd78a">
+|<img width="538" alt="image" src="https://github.com/user-attachments/assets/2541bf29-fb0b-46d3-99a9-a3348351e822">
+
 
 
 
