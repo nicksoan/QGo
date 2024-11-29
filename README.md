@@ -1,6 +1,6 @@
 # QGo
 
-QGo is a versatile command parser application that allows users to execute various types of commands, including opening websites, accessing UNC paths, opening local folders, and running executable files. The application also supports custom shortcuts for frequently used commands.
+QGo is a versatile command parser application that allows users to execute various types of commands, including opening websites, accessing UNC paths, local folders, and running executable files. 
 
 ## Features
 
@@ -10,28 +10,49 @@ QGo is a versatile command parser application that allows users to execute vario
 - **Run Executable Files**: Execute `.exe` files directly from the command parser.
 - **Custom Shortcuts**: Define and use custom shortcuts for frequently used commands.
 
+- **Parameterisation**: Each command can be parameterised.
+
 ## Usage
 
-### Commands
 
-- **Websites**: Enter a URL starting with `http://` or `https://` to open it in the default browser.
-- **UNC Paths**: Enter a UNC path starting with `\\` to open it in File Explorer.
-- **Local Folders**: Enter a local folder path (e.g., `C:\Users\MyUserId\Documents`) to open it in File Explorer.
-- **Executable Files**: Enter the path to an executable file (e.g., `C:\Program Files\MyApp\app.exe`) to run it.
-- **Shortcuts**: Use predefined shortcuts to quickly execute commands. Shortcuts can include placeholders for parameters.
+### Command Matching
+
+- **Websites**: Commands containing a URL starting with `http://` or `https://` will be opened in the default browser.
+- **UNC Paths**: UNC paths starting with `\\` will be opened in File Explorer.
+- **Local Folders**: Local folder paths (e.g., `C:\Users\MyUserId\Documents`) will be opened in File Explorer.
+- **Executable Files**: Exe files (e.g., `C:\Program Files\MyApp\app.exe`) will be run.
 
 ### Example Commands
+```
+{
+  "google": "https://www.google.com/search?q={param}",
+  "documents": "%HOMEPATH%",
+  "networkshare": "\\\\server\\sharedfolder",
+  "youtube": "https://www.youtube.com/results?search_query={param}",
+  "reddit": "https://reddit.com",
+  "github": "https://github.com/",
+  "temp": "C:\temp",
+  "qgo": "https://github.com/nicksoan/QGo",
+  "repo": "%USERPROFILE%",
+  "notepad": "C:\\Program Files (x86)\\Notepad++\\notepad++.exe"
 
-- Open a website: `https://www.example.com`
-- Access a UNC path: `\\Server\Share`
-- Open a local folder: `C:\Users\MyUserId\Documents`
-- Run an executable file: `C:\Program Files\MyApp\app.exe`
-- Use a shortcut: `myshortcut {param}`
+}
+```
 
 ## Configuration
 
-### Shortcuts
+<img width="370" alt="image" src="https://github.com/user-attachments/assets/f1940e78-5458-468d-af90-5631656d8886">
 
-Shortcuts are defined in a JSON file. The JSON file should be located at a specified path and contain key-value pairs where the key is the shortcut name and the value is the command.
+You can modify basic settings in QGo, such as 
+- Default background colour
+- Default font Colour
+- Matched shortcut background colour
+- Matched shortcut font colour
+- Font size
+- Wake shortcut
+
+### Shortcuts
+Right click on the input box and select "Edit Shortcuts" to open the list of Command/Shortcut pairs
+Shortcuts are also defined in a JSON file which can be edited, but the program will require you to restart to register the changes. The shortcuts.json file is located in the Data folder where your QGo executable is stored.
 
 #### Example `shortcuts.json`
