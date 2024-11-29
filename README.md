@@ -1,7 +1,11 @@
 # QGo
 
-QGo is a versatile command parser application that allows users to execute various types of commands, including opening websites, accessing UNC paths, local folders, and running executable files. 
-<img width="180" alt="image" src="https://github.com/user-attachments/assets/b0b9b9f4-21f8-4dc8-9c26-9ac6841f6c83">
+<div style="display: flex; align-items: left; gap: 20px;">
+  <img width="100" alt="image" src="https://github.com/user-attachments/assets/011ceca5-686f-4f20-a23e-c9807b5d2ffa">
+  <p>QGo is a versatile command parser application that allows users to execute various types of commands, including opening websites, accessing UNC paths, local folders, and running executable files. </p>
+</div>
+
+<img  alt="image" src="https://github.com/user-attachments/assets/b0b9b9f4-21f8-4dc8-9c26-9ac6841f6c83">
 
 
 ## Features
@@ -13,14 +17,11 @@ QGo is a versatile command parser application that allows users to execute vario
 - **Custom Shortcuts**: Define and use custom shortcuts for frequently used commands.
 
 - **Parameterisation**: Each command can be parameterised.
-  
-### Example to Google "Hello World"
+  - Example to Google "Hello World":
+    
 ![Image 1](https://github.com/user-attachments/assets/3a36110b-8074-4ea9-8eb5-cbe19d8fd78a)
 
 ![Image 2](https://github.com/user-attachments/assets/2541bf29-fb0b-46d3-99a9-a3348351e822)
-
-
-
 
 ## Usage
 
