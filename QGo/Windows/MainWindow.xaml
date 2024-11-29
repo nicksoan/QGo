@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:QGo.Windows"
         xmlns:functions="clr-namespace:QGo.Functions"
         mc:Ignorable="d"
-        KeyDown="Window_KeyDown" PreviewKeyDown="Window_PreviewKeyDown" Loaded="MainWindow_Loaded" WindowStyle="None" SizeChanged="Window_SizeChanged"
+        PreviewKeyDown="Window_PreviewKeyDown" Loaded="MainWindow_Loaded" WindowStyle="None" SizeChanged="Window_SizeChanged"
         Title="MainWindow" Height="100" Width="500">
     <Window.Resources>
         <functions:HeightToWidthConverter x:Key="HeightToWidthConverter"/>
@@ -18,7 +18,8 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown" Cursor="SizeAll">
             <Rectangle Fill="Transparent"/>
-            <Image Name="Logo" Source="/Images/QGoLogoSmall.png" VerticalAlignment="Top" Margin="0 2 0 2" MinWidth="25" MaxWidth="50" Width="25" HorizontalAlignment="Center" />
+            <!--<Image Name="Logo" Source="/Images/QGoLogoSmall.png" VerticalAlignment="Top" Margin="0 2 0 2" MinWidth="25" MaxWidth="50" Width="25" HorizontalAlignment="Center" />-->
+            <Image Name="Logo" Source="pack://siteoforigin:,,,/Images/QGoLogoSmall.png" VerticalAlignment="Top" Margin="0 2 0 2" MinWidth="25" MaxWidth="50" Width="25" HorizontalAlignment="Center" />
         </Grid>
         <TextBox Grid.Column="1" Margin="0 0 0 0" Background="Beige" Name="queryText" TextChanged="queryText_TextChanged" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
             <TextBox.ContextMenu>

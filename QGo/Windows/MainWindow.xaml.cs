@@ -1,4 +1,5 @@
-﻿using QGo.Functions;
+﻿using Microsoft.Win32;
+using QGo.Functions;
 using QGo.Models;
 using System.Diagnostics;
 using System.Windows;
@@ -6,7 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
+
 using Application = System.Windows.Application;
+using System.IO;
 
 
 namespace QGo.Windows
@@ -40,6 +43,7 @@ namespace QGo.Windows
             _parser = new CommandParser(fullPathShortcuts);
 
             InitializeComponent();
+            SetStartup(true);
             InitializeNotifyIcon();
             Loaded += MainWindow_Loaded;
             SourceInitialized += MainWindow_SourceInitialized;
@@ -69,40 +73,6 @@ namespace QGo.Windows
             _notifyIcon.DoubleClick += (s, e) => ShowWindow();
         }
 
-        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                Debug.WriteLine("Enter pressed!");
-                // Execute the command when Enter key is pressed
-                string command = queryText.Text;
-                var qSearchResult = _parser.ExecuteCommand(command);
-                if (qSearchResult.Success)
-                {
-                    _uiService.ClearText();
-                    HideWindow();
-                }
-                else
-                {
-                    _uiService.FlashError();
-                    queryText.SelectAll();
-                }
-            }
-            else if ((e.Key >= Key.A && e.Key <= Key.Z) || // Letters A-Z
-                    (e.Key >= Key.D0 && e.Key <= Key.D9) || // Numbers 0-9 (main keyboard)
-                    (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9))
-            {
-                AddKeyToCurrentCharArray(e);
-            }
-            else if (e.Key == Key.Escape)
-            {
-                // Hide the window and minimize to system tray when Escape key is pressed
-                HideWindow();
-            }
-        }
-
-
-
         private void AddKeyToCurrentCharArray(System.Windows.Input.KeyEventArgs e)
         {
             string keyString = e.Key.ToString().ToLower();
@@ -112,6 +82,10 @@ namespace QGo.Windows
             if (e.Key >= Key.D0 && e.Key <= Key.D9)
             {
                 newChar = (char)('0' + (e.Key - Key.D0)); // Convert Key.D0 to '0', Key.D1 to '1', etc.
+            }
+            else if (e.Key == Key.Space)
+            {
+                newChar = ' '; // Handle space character
             }
             else
             {
@@ -147,7 +121,43 @@ namespace QGo.Windows
 
         private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == Key.Back)
+            if (e.Key == Key.Enter)
+            {
+                if (String.IsNullOrEmpty(queryText.Text))
+                {
+                    return;
+                }
+
+                Debug.WriteLine("Enter pressed!");
+                // Execute the command when Enter key is pressed
+
+                QQuery query = _uiService.ParseCommandQuery(queryText.Text);
+
+                var qSearchResult = _parser.ExecuteCommand(query);
+                if (qSearchResult.Success)
+                {
+                    _uiService.ClearText();
+                    HideWindow();
+                }
+                else
+                {
+                    _uiService.FlashError();
+                    queryText.SelectAll();
+                }
+            }
+            else if ((e.Key >= Key.A && e.Key <= Key.Z) || // Letters A-Z
+                    (e.Key >= Key.D0 && e.Key <= Key.D9) || // Numbers 0-9 (main keyboard)
+                    (e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9) || //Numbers 0-9 (keypad)
+                    e.Key == Key.Space) // Space character
+            {
+                AddKeyToCurrentCharArray(e);
+            }
+            else if (e.Key == Key.Escape)
+            {
+                // Hide the window and minimize to system tray when Escape key is pressed
+                HideWindow();
+            }
+            else if (e.Key == Key.Back)
             {
                 HandleDelete(e, deletePreviousChar: true);
             }
@@ -155,6 +165,7 @@ namespace QGo.Windows
             {
                 HandleDelete(e, deletePreviousChar: false);
             }
+
         }
 
         private void HandleDelete(System.Windows.Input.KeyEventArgs e, bool deletePreviousChar = true)
@@ -232,6 +243,8 @@ namespace QGo.Windows
 
 
 
+
+
         //private void ApplyFoundQuery(string currentText, string match)
         //{
         //    // Temporarily detach event handler
@@ -276,7 +289,7 @@ namespace QGo.Windows
 
         public void UpdateUserShortcuts()
         {
-         _parser.RefreshShortuts();
+            _parser.RefreshShortuts();
         }
 
         public void UpdateUserSettings(UserSettings updatedSettings)
@@ -315,7 +328,7 @@ namespace QGo.Windows
 
         private void mnuEditShortcuts_Click(object sender, RoutedEventArgs e)
         {
-            var editShortcutsWindow = new EditShortcutsWindow(fullPathShortcuts,this);
+            var editShortcutsWindow = new EditShortcutsWindow(fullPathShortcuts, this);
             editShortcutsWindow.Show();
         }
 
@@ -349,6 +362,30 @@ namespace QGo.Windows
         private void mnuQuit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void SetStartup(bool enable)
+        {
+            try
+            {
+                string appName = "QGo";
+                string appPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "QGo", "QGo.exe");
+
+                RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+                if (enable)
+                {
+                    rk.SetValue(appName, appPath);
+                }
+                else
+                {
+                    rk.DeleteValue(appName, false);
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show($"Failed to set startup: {ex.Message}");
+            }
         }
     }
 }

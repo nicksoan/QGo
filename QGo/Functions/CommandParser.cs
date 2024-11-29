@@ -17,55 +17,67 @@ namespace QGo.Functions
         // Regular expression to identify command types (UNC path, local folder, website, etc.)
         private static readonly Regex WebsiteRegex = new Regex(@"^(http|https)://", RegexOptions.IgnoreCase);
         private static readonly Regex UncPathRegex = new Regex(@"^\\\\", RegexOptions.IgnoreCase);
-        private static readonly Regex LocalPathRegex = new Regex(@"^[a-zA-Z]:\\", RegexOptions.IgnoreCase);
+        private static readonly Regex LocalPathRegex = new Regex(@"^([a-zA-Z]:\\|%[A-Z0-9_]+%)", RegexOptions.IgnoreCase);
         private Dictionary<string, string> _shortcuts;
         private readonly string _jsonLocation = "";
+        private static readonly Regex ExecutableFileRegex = new Regex(@"^([a-zA-Z]:\\|%[A-Z0-9_]+%).*\.exe$", RegexOptions.IgnoreCase);
         public CommandParser(string jsonLocation)
         {
             _jsonLocation = jsonLocation;
             _shortcuts = LoadShortcuts(_jsonLocation);
         }
-        public QSearchResult ExecuteCommand(string command)
+        public QSearchResult ExecuteCommand(QQuery query)
         {
             var searchResult = new QSearchResult();
 
             try
             {
                 // Trim the command to handle any extra spaces.
-                command = command.Trim();
+                query.Command = query.Command.Trim();
 
-                if (string.IsNullOrEmpty(command))
+                if (string.IsNullOrEmpty(query.Command))
                 {
                     searchResult.Success = false;
-                    searchResult.Message = "Empty command. Please provide a valid command.";
                     return searchResult;
                 }
 
                 // Check if the command is a shortcut
-                if (_shortcuts.ContainsKey(command))
+                if (_shortcuts.ContainsKey(query.Command))
                 {
-                    command = _shortcuts[command];
+                    query.Command = _shortcuts[query.Command];
+
+                    //Replace the {param} placeholder with the actual parameter in query.Param
+                    if (!string.IsNullOrEmpty(query.Param))
+                    {
+                        query.Command = query.Command.Replace("{param}", query.Param);
+                    }
                 }
 
                 // Determine the type of command and execute accordingly
-                if (WebsiteRegex.IsMatch(command))
+                if (WebsiteRegex.IsMatch(query.Command))
                 {
-                    OpenWebsite(command);
-                    searchResult.Success = true;
-                    searchResult.Message = "Running Command";
-                    return searchResult;
-
-                }
-                else if (UncPathRegex.IsMatch(command))
-                {
-                    OpenUncPath(command);
+                    OpenWebsite(query.Command);
                     searchResult.Success = true;
                     searchResult.Message = "Running Command";
                     return searchResult;
                 }
-                else if (LocalPathRegex.IsMatch(command))
+                else if (UncPathRegex.IsMatch(query.Command))
                 {
-                    OpenLocalFolder(command);
+                    OpenUncPath(query.Command);
+                    searchResult.Success = true;
+                    searchResult.Message = "Running Command";
+                    return searchResult;
+                }
+                else if (ExecutableFileRegex.IsMatch(query.Command))
+                {
+                    RunExecutable(query.Command);
+                    searchResult.Success = true;
+                    searchResult.Message = "Running Command";
+                    return searchResult;
+                }
+                else if (LocalPathRegex.IsMatch(query.Command))
+                {
+                    OpenLocalFolder(query.Command);
                     searchResult.Success = true;
                     searchResult.Message = "Running Command";
                     return searchResult;
@@ -123,6 +135,12 @@ namespace QGo.Functions
         {
             try
             {
+                if (localPath.StartsWith("%"))
+                {
+                    Process.Start(new ProcessStartInfo("explorer", localPath) { UseShellExecute = true });
+                    return;
+                }
+
                 if (Directory.Exists(localPath))
                 {
                     // Open the local folder in File Explorer.
@@ -136,6 +154,26 @@ namespace QGo.Functions
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed to open local folder: {ex.Message}");
+            }
+        }
+
+        private void RunExecutable(string executablePath)
+        {
+            try
+            {
+                if (File.Exists(executablePath))
+                {
+                    // Run the executable file.
+                    Process.Start(new ProcessStartInfo(executablePath) { UseShellExecute = true });
+                }
+                else
+                {
+                    Console.WriteLine("The specified executable file does not exist.");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to run executable: {ex.Message}");
             }
         }
 
@@ -173,5 +211,6 @@ namespace QGo.Functions
                 }
             }
         }
+
     }
 }

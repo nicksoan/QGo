@@ -196,6 +196,20 @@ namespace QGo.Functions
             }
         }
 
+        public QQuery ParseCommandQuery(string queryText)
+        {
+            QQuery query = new QQuery
+            {
+                Command = queryText ?? "",
+                Param = ""
+            };
+
+            var split = queryText.Split(' ');
+            query.Command = split[0];
+            query.Param = split.Length > 1 ? split[1] : "";
+            return query;
+        }
+
         public void ApplySettings(UserSettings userSettings)
         {
             try
