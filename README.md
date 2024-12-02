@@ -76,3 +76,4 @@ Shortcuts are also defined in a JSON file which can be edited, but the program w
 
 #### Future Plans
 - V2 restructuring to allow plugins
+- Multipart shortcuts? (eg. Folders > Foldernames)
