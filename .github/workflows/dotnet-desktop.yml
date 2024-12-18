@@ -1,4 +1,4 @@
-name: Build, Publish, and Release
+name: Build, Publish, and Deploy to GitHub Pages
 
 on:
   push:
@@ -11,69 +11,37 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '8.0.x' # Adjust the .NET version as needed
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x' # Adjust as needed
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build --configuration Release --no-restore
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
 
-    - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
 
-    - name: Publish
-      run: dotnet publish --configuration Release --output ./publish --no-restore
+      - name: Publish
+        run: dotnet publish --configuration Release --output ./publish --no-restore
 
-    - name: Debug Directories
-      run: find /home/runner/work/QGo/QGo -type d
+      - name: Debug Directories
+        run: find /home/runner/work/QGo/QGo -type d
 
-    - name: List Publish Directory
-      run: ls -la /home/runner/work/QGo/QGo/publish
+      - name: List Publish Directory
+        run: ls -la /home/runner/work/QGo/QGo/publish
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: published-app
-        path: /home/runner/work/QGo/QGo/publish
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: published-app
-
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release v${{ github.run_number }}
-        body: |
-          This release includes the latest changes to the application.
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./QGo.zip 
-        asset_name: QGo.build.${{ github.ref }}.zip
-        asset_content_type: application/zip
-
-    - name: Compress Files
-      run: zip -r QGo.zip ./publish
+      # Deploy to GitHub Pages branch (gh-pages)
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: publish
+          clean: true
