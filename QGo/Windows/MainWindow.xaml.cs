@@ -43,7 +43,7 @@ namespace QGo.Windows
             _parser = new CommandParser(fullPathShortcuts);
 
             InitializeComponent();
-            SetStartup(true);
+            //SetStartup(true);
             InitializeNotifyIcon();
             Loaded += MainWindow_Loaded;
             SourceInitialized += MainWindow_SourceInitialized;
@@ -364,28 +364,31 @@ namespace QGo.Windows
             Application.Current.Shutdown();
         }
 
-        private void SetStartup(bool enable)
-        {
-            try
-            {
-                string appName = "QGo";
-                string appPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Programs), "QGo", "QGo.exe");
+        //private void SetStartup(bool enable)
+        //{
+        //    try
+        //    {
+        //        if (ApplicationDeployment.IsNetworkDeployed)
+        //        {
+        //            string appName = "QGo";
+        //            string appPath = ApplicationDeployment.CurrentDeployment.UpdateLocation.AbsoluteUri;
 
-                RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+        //            RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
-                if (enable)
-                {
-                    rk.SetValue(appName, appPath);
-                }
-                else
-                {
-                    rk.DeleteValue(appName, false);
-                }
-            }
-            catch (Exception ex)
-            {
-                System.Windows.MessageBox.Show($"Failed to set startup: {ex.Message}");
-            }
-        }
+        //            if (enable)
+        //            {
+        //                rk.SetValue(appName, appPath);
+        //            }
+        //            else
+        //            {
+        //                rk.DeleteValue(appName, false);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        System.Windows.MessageBox.Show($"Failed to set startup: {ex.Message}");
+        //    }
+        //}
     }
 }
