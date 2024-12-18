@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,8 +30,7 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
 
       - name: Publish using ClickOnce Profile
-        run: dotnet publish --configuration Release --output ./publish --publish-profile ClickOnceProfile
-
+        run: dotnet publish --configuration Release --output ./publish -p:PublishProfile=ClickOnceProfile /p:PublishDir=./publish /p:GenerateClickOnceManifests=true
 
       - name: Debug Directories
         run: find /home/runner/work/QGo/QGo -type d
