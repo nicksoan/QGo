@@ -1,0 +1,13 @@
+{
+  "WindowColour": "#004080",
+  "FoundColour": "#80FF80",
+  "FontColour": "#FFFFFF",
+  "FontColourFound": "#000000",
+  "FontSize": 24.0,
+  "WindowPositionX": 100.0,
+  "WindowPositionY": 100.0,
+  "WindowWidth": 150.0,
+  "WindowHeight": 50.0,
+  "HotKey": "Q",
+  "HotKeyModifiers": ["Alt"]
+}
