@@ -29,8 +29,8 @@ jobs:
       - name: Test
         run: dotnet test --no-restore --verbosity normal
 
-      - name: Publish
-        run: dotnet publish --configuration Release --output ./publish --no-restore
+      - name: Publish using ClickOnce Profile
+        run: dotnet publish --configuration Release --output ./publish --publish-profile ClickOnceProfilee
 
       - name: Debug Directories
         run: find /home/runner/work/QGo/QGo -type d
