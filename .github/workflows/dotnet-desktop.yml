@@ -30,13 +30,23 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
 
       - name: Publish using ClickOnce Profile
-        run: dotnet publish --configuration Release --output ./publish -p:PublishProfile=ClickOnceProfile
+        run: dotnet publish --configuration Release --output ./publish --publish-profile ClickOnceProfile
+
 
       - name: Debug Directories
         run: find /home/runner/work/QGo/QGo -type d
 
       - name: List Publish Directory
         run: ls -la /home/runner/work/QGo/QGo/publish
+
+      - name: Clear GitHub Pages branch
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+          git rm -rf . # Remove all files
+          git clean -fd
+          git commit -m "Clean old files" || echo "No changes to commit"
+          git push origin gh-pages
 
       # Deploy to GitHub Pages branch (gh-pages)
       - name: Deploy to GitHub Pages
