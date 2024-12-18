@@ -39,3 +39,4 @@ jobs:
           branch: gh-pages
           folder: publish
           clean: true
+          
