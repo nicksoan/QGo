@@ -33,15 +33,13 @@ jobs:
         run: dotnet publish --configuration Release --output ./publish -p:PublishProfile=ClickOnceProfile /p:PublishDir=./publish /p:GenerateClickOnceManifests=true
 
       # Deploy to GitHub Pages branch (gh-pages)
-      - name: Deploy to GitHub Pages
+      - name: Clear GitHub Pages branch
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin gh-pages
           git checkout gh-pages
-          robocopy ./publish ./ /mir
+          robocopy ./publish ./ /MIR /XD .git /R:3 /W:10
           git add .
-          git commit -m "Deploy to GitHub Pages" || echo "No changes to commit"
+          git commit -m "Clean old files" || echo "No changes to commit"
           git push origin gh-pages
         shell: cmd
           
