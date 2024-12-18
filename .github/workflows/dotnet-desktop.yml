@@ -30,8 +30,8 @@ jobs:
         run: dotnet test --no-restore --verbosity normal
 
       - name: Publish using ClickOnce Profile
-        run: dotnet publish --configuration Release --output ./publish -p:PublishProfile=ClickOnceProfile /p:PublishDir=./publish /p:GenerateClickOnceManifests=true
-
+        run: dotnet publish --configuration Release --output ./publish -p:PublishProfile=ClickOnceProfile -p:GenerateClickOnceManifests=true
+        
       # Deploy to GitHub Pages branch (gh-pages)
       - name: Clear GitHub Pages branch
         run: |
