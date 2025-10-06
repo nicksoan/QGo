@@ -2,6 +2,8 @@
 using QGo.App.Models;
 using QGo.App.Views;
 using System;
+using System.IO;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -12,6 +14,10 @@ public partial class MainWindow : Window
     private readonly int _hotkeyId = 0xBEEF;
     private MainViewModel Vm => (MainViewModel)DataContext;
 
+    private readonly string _storePath =
+       Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "QGo", "window.json");
+    private bool _loaded;
+
     public MainWindow()
     {
         InitializeComponent();
@@ -19,8 +25,11 @@ public partial class MainWindow : Window
 
         Loaded += (_, __) =>
         {
-            Left = SystemParameters.WorkArea.Width / 2 - Width / 2;
-            Top = SystemParameters.WorkArea.Top + 60;
+            //Left = SystemParameters.WorkArea.Width / 2 - Width / 2;
+            //Top = SystemParameters.WorkArea.Top + 60;
+
+            RestorePlacement();
+            _loaded = true;
 
             var handle = new WindowInteropHelper(this).Handle;
             Hotkey.TryRegister(handle, _hotkeyId, Vm.Settings.HotkeyGesture);
@@ -30,6 +39,10 @@ public partial class MainWindow : Window
 
             Hide();
         };
+
+        LocationChanged += (_, __) => SavePlacement();
+        SizeChanged += (_, __) => SavePlacement();
+        StateChanged += (_, __) => SavePlacement();
 
         // Key handling for navigation and selection
         PreviewKeyDown += (s, e) =>
@@ -129,6 +142,7 @@ public partial class MainWindow : Window
     {
         var handle = new WindowInteropHelper(this).Handle;
         Hotkey.Unregister(handle, _hotkeyId);
+        SavePlacement();
         base.OnClosed(e);
     }
 
@@ -140,5 +154,64 @@ public partial class MainWindow : Window
     {
         if (e.ButtonState == MouseButtonState.Pressed)
             DragMove();
+    }
+
+    private void SavePlacement()
+    {
+        if (!_loaded || WindowState == WindowState.Minimized) return;
+
+        try
+        {
+            var dir = Path.GetDirectoryName(_storePath)!;
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+
+            var hwnd = new WindowInteropHelper(this).Handle;
+            var data = new WindowPlacement
+            {
+                Left = Left,
+                Top = Top,
+                Width = Width,
+                Height = Height,
+                IsMaximized = WindowState == WindowState.Maximized,
+                MonitorDeviceName = "Unknown"
+            };
+            File.WriteAllText(_storePath, JsonSerializer.Serialize(data));
+        }
+        catch { /* ignore */ }
+    }
+
+    private void RestorePlacement()
+    {
+        try
+        {
+            if (!File.Exists(_storePath)) return;
+            var data = JsonSerializer.Deserialize<WindowPlacement>(File.ReadAllText(_storePath));
+            if (data == null) return;
+
+            // Apply saved position and size
+            Left = data.Left;
+            Top = data.Top;
+            Width = data.Width;
+            Height = data.Height;
+
+            // Ensure window is visible on current desktop work area
+            var workArea = SystemParameters.WorkArea;
+
+            if (Left + Width < workArea.Left + 50 ||
+                Top + Height < workArea.Top + 50 ||
+                Left > workArea.Right - 50 ||
+                Top > workArea.Bottom - 50)
+            {
+                Left = workArea.Left + (workArea.Width - Width) / 2;
+                Top = workArea.Top + (workArea.Height - Height) / 2;
+            }
+
+            if (data.IsMaximized)
+                WindowState = WindowState.Maximized;
+        }
+        catch
+        {
+            // ignore
+        }
     }
 }
