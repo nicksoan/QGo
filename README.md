@@ -5,7 +5,8 @@
   <p>QGo is a versatile command parser application that allows users to execute various types of commands, including opening websites, accessing UNC paths, local folders, and running executable files. </p>
 </div>
 
-<img  alt="image" src="https://github.com/user-attachments/assets/b0b9b9f4-21f8-4dc8-9c26-9ac6841f6c83">
+<img width="322" height="87" alt="image" src="https://github.com/user-attachments/assets/4aeb1b2c-e31f-4dbd-86f4-8dcd46796b6f" />
+
 
 
 ## Features
@@ -19,9 +20,11 @@
 - **Parameterisation**: Each command can be parameterised.
   - Example to Google "Hello World":
     
-![Image 1](https://github.com/user-attachments/assets/3a36110b-8074-4ea9-8eb5-cbe19d8fd78a)
+<img width="227" height="54" alt="image" src="https://github.com/user-attachments/assets/66faef59-57e6-4fab-bb43-4d56a428423e" />
 
-![Image 2](https://github.com/user-attachments/assets/2541bf29-fb0b-46d3-99a9-a3348351e822)
+
+<img width="821" height="321" alt="image" src="https://github.com/user-attachments/assets/05000c6d-49ee-413d-80d0-12ba0ff11b51" />
+
 
 ## Usage
 
