@@ -55,17 +55,17 @@
 
 ## Configuration
 
-<img width="370" alt="image" src="https://github.com/user-attachments/assets/f1940e78-5458-468d-af90-5631656d8886">
+<img width="302" height="177" alt="image" src="https://github.com/user-attachments/assets/1d31b501-740f-4c36-851a-6c55a36797ef" />
 
 You can modify basic settings in QGo, such as 
 - Default background colour
 - Default font Colour
-- Matched shortcut background colour
-- Matched shortcut font colour
 - Font size
 - Wake shortcut
 
 ### Shortcuts
+<img width="406" height="242" alt="image" src="https://github.com/user-attachments/assets/44fc3977-fc78-4e46-9b12-7de1fd57e290" />
+
 Right click on the input box and select "Edit Shortcuts" to open the list of Command/Shortcut pairs
 Shortcuts are also defined in a JSON file which can be edited, but the program will require you to restart to register the changes. The shortcuts.json file is located in the Data folder where your QGo executable is stored.
 
@@ -75,7 +75,8 @@ Shortcuts are also defined in a JSON file which can be edited, but the program w
 
 #### WIP Improvements
 - Update Taskbar icon
-- 
+- Resizing/Screen Positioning
+- Autocomplete highlighting / tab for params
 
 #### Future Plans
 - V2 restructuring to allow plugins
