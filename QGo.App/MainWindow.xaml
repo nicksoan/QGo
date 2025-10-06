@@ -11,11 +11,10 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis"/>
     </Window.Resources>
-    
-  
-    
+
+
     <Grid>
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -31,7 +30,9 @@
          VerticalAlignment="Center"
          Margin="4,0,8,0"
          Source="pack://application:,,,/QGo.App;component/Assets/QGoLogoSmall.png"
-         ImageFailed="Image_ImageFailed"/>
+         ImageFailed="Image_ImageFailed"
+         MouseLeftButtonDown="DragWindow"
+               />
 
         <TextBox x:Name="Input"  Grid.Column="1"
                  Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
@@ -67,4 +68,5 @@
             </ListBox.Style>
         </ListBox>
     </Grid>
+
 </Window>

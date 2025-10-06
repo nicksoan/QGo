@@ -136,8 +136,9 @@ public partial class MainWindow : Window
     {
         MessageBox.Show(e.ErrorException?.Message ?? "Image load failed");
     }
-    private void DragBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void DragWindow(object sender, MouseButtonEventArgs e)
     {
-        if (e.ChangedButton == MouseButton.Left) DragMove();
+        if (e.ButtonState == MouseButtonState.Pressed)
+            DragMove();
     }
 }
