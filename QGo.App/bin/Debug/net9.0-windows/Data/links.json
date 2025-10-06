@@ -1,0 +1,12 @@
+{
+  "google": "https://www.google.com/search?q={param}",
+  "documents": "%HOMEPATH%",
+  "networkshare": "\\\\server\\sharedfolder",
+  "youtube": "https://www.youtube.com/results?search_query={param}",
+  "reddit": "https://reddit.com",
+  "github": "https://github.com/",
+  "temp": "C:\\temp",
+  "qgo": "https://github.com/nicksoan/QGo",
+  "repo": "%USERPROFILE%",
+  "notepad": "C:\\Program Files (x86)\\Notepad++\\notepad++.exe"
+}
