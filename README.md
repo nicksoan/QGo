@@ -1,11 +1,11 @@
 # QGo
 
 <div style="display: flex; align-items: left; gap: 20px;">
-  <img width="100" alt="image" src="https://github.com/user-attachments/assets/011ceca5-686f-4f20-a23e-c9807b5d2ffa">
+  <img width="100" height="100" alt="QGoLogo" src="https://github.com/user-attachments/assets/e6de29c0-4c76-4c19-aff6-a203d0188549" />
   <p>QGo is a versatile command parser application that allows users to execute various types of commands, including opening websites, accessing UNC paths, local folders, and running executable files. </p>
 </div>
 
-<img width="322" height="87" alt="image" src="https://github.com/user-attachments/assets/4aeb1b2c-e31f-4dbd-86f4-8dcd46796b6f" />
+
 
 
 
