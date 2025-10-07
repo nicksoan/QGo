@@ -77,6 +77,9 @@ Shortcuts are also defined in a JSON file which can be edited, but the program w
 - Update Taskbar icon
 - Resizing/Screen Positioning
 - Autocomplete highlighting / tab for params
+- Trigger multiple actions
+- Toggle System settings (Display, sound, etc...)
+- Import/Export Settings & Shortcuts
 
 #### Future Plans
 - V2 restructuring to allow plugins
