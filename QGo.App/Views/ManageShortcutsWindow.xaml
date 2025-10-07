@@ -10,11 +10,16 @@
             <Separator/>
             <Button Content="Save" Click="Save_Click"/>
         </ToolBar>
+        <ToolBar DockPanel.Dock="Bottom">
+            <Button Content="Import..." Click="Import_Click"/>
+            <Button Content="Export..." Click="Export_Click"/>
+        </ToolBar>
         <DataGrid ItemsSource="{Binding Items}" AutoGenerateColumns="False" CanUserAddRows="False" Margin="8">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Key" Binding="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="1*"/>
                 <DataGridTextColumn Header="Template" Binding="{Binding Template, UpdateSourceTrigger=PropertyChanged}" Width="2*"/>
             </DataGrid.Columns>
         </DataGrid>
+        
     </DockPanel>
 </Window>

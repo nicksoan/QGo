@@ -15,7 +15,8 @@ public partial class MainWindow : Window
     private MainViewModel Vm => (MainViewModel)DataContext;
 
     private readonly string _storePath =
-       Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "QGo", "window.json");
+       Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "QGo", "Data", "window.json");
+    
     private bool _loaded;
 
     public MainWindow()
@@ -134,6 +135,10 @@ public partial class MainWindow : Window
             Storage.SaveLinks(vm.Items);
         }
     }
+    private void About_Click(object sender, RoutedEventArgs e)
+    {
+        new AboutWindow { Owner = this }.ShowDialog();
+    }
 
     // Context menu: exit program
     private void Exit_Click(object sender, RoutedEventArgs e) => Close();
@@ -159,9 +164,9 @@ public partial class MainWindow : Window
     private void SavePlacement()
     {
         if (!_loaded || WindowState == WindowState.Minimized) return;
-
         try
         {
+
             var dir = Path.GetDirectoryName(_storePath)!;
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
 

@@ -12,7 +12,7 @@ public static class Storage
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "QGo", "Data");
 
-    static string LinksPath => Path.Combine(BaseDir, "links.json");
+    public static string LinksPath => Path.Combine(BaseDir, "links.json");
     static string SettingsPath => Path.Combine(BaseDir, "settings.json");
 
     public static Dictionary<string, string> LoadLinksOrDefaults()
