@@ -20,7 +20,7 @@
 - **Parameterisation**: Each command can be parameterised.
   - Example to Google "Hello World":
     
-<img width="227" height="54" alt="image" src="https://github.com/user-attachments/assets/66faef59-57e6-4fab-bb43-4d56a428423e" />
+<img width="550" height="200" alt="QGo_Google" src="https://github.com/user-attachments/assets/a6c8706c-ab7c-436c-8d28-c24298a2dee6" />
 
 
 <img width="821" height="321" alt="image" src="https://github.com/user-attachments/assets/05000c6d-49ee-413d-80d0-12ba0ff11b51" />
