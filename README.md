@@ -1,11 +1,12 @@
 # QGo
 
 <div style="display: flex; align-items: left; gap: 20px;">
-  <img width="100" alt="image" src="https://github.com/user-attachments/assets/011ceca5-686f-4f20-a23e-c9807b5d2ffa">
+  <img width="100" height="100" alt="QGoLogo" src="https://github.com/user-attachments/assets/e6de29c0-4c76-4c19-aff6-a203d0188549" />
   <p>QGo is a versatile command parser application that allows users to execute various types of commands, including opening websites, accessing UNC paths, local folders, and running executable files. </p>
 </div>
 
-<img  alt="image" src="https://github.com/user-attachments/assets/b0b9b9f4-21f8-4dc8-9c26-9ac6841f6c83">
+
+
 
 
 ## Features
@@ -19,9 +20,11 @@
 - **Parameterisation**: Each command can be parameterised.
   - Example to Google "Hello World":
     
-![Image 1](https://github.com/user-attachments/assets/3a36110b-8074-4ea9-8eb5-cbe19d8fd78a)
+<img width="227" height="54" alt="image" src="https://github.com/user-attachments/assets/66faef59-57e6-4fab-bb43-4d56a428423e" />
 
-![Image 2](https://github.com/user-attachments/assets/2541bf29-fb0b-46d3-99a9-a3348351e822)
+
+<img width="821" height="321" alt="image" src="https://github.com/user-attachments/assets/05000c6d-49ee-413d-80d0-12ba0ff11b51" />
+
 
 ## Usage
 
@@ -52,17 +55,17 @@
 
 ## Configuration
 
-<img width="370" alt="image" src="https://github.com/user-attachments/assets/f1940e78-5458-468d-af90-5631656d8886">
+<img width="302" height="177" alt="image" src="https://github.com/user-attachments/assets/1d31b501-740f-4c36-851a-6c55a36797ef" />
 
 You can modify basic settings in QGo, such as 
 - Default background colour
 - Default font Colour
-- Matched shortcut background colour
-- Matched shortcut font colour
 - Font size
 - Wake shortcut
 
 ### Shortcuts
+<img width="406" height="242" alt="image" src="https://github.com/user-attachments/assets/44fc3977-fc78-4e46-9b12-7de1fd57e290" />
+
 Right click on the input box and select "Edit Shortcuts" to open the list of Command/Shortcut pairs
 Shortcuts are also defined in a JSON file which can be edited, but the program will require you to restart to register the changes. The shortcuts.json file is located in the Data folder where your QGo executable is stored.
 
@@ -72,7 +75,11 @@ Shortcuts are also defined in a JSON file which can be edited, but the program w
 
 #### WIP Improvements
 - Update Taskbar icon
-- 
+- Resizing/Screen Positioning
+- Autocomplete highlighting / tab for params
+- Trigger multiple actions
+- Toggle System settings (Display, sound, etc...)
+- Import/Export Settings & Shortcuts
 
 #### Future Plans
 - V2 restructuring to allow plugins
