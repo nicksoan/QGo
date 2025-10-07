@@ -6,10 +6,7 @@
 </div>
 
 
-
-
-![QGoDemo](https://github.com/user-attachments/assets/22c61213-16f0-40ba-88ac-d68cebe060f3)
-
+![QGoDemo](https://github.com/user-attachments/assets/49c9ea82-c2f2-45ff-808d-9aa8c70527b2)
 
 
 ## Features
